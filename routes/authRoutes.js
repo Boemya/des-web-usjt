@@ -1,7 +1,6 @@
 // routes/authRoutes.js
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const router = express.Router();
@@ -14,19 +13,19 @@ router.post('/login', async (req, res) => {
     // Verifica se o usuário existe
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Email ou senha Inválidos' });
     }
 
     // Verifica a senha
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Email ou senha Inválidos' });
     }
 
-    // Gera o token de autenticação
-    const token = jwt.sign({ userId: user.id, email: user.email }, 'your-secret-key');
+    // Credenciais válidas
+    req.session.userId = user.id; // Armazena o ID do usuário na sessão
 
-    res.status(200).json({ token });
+    res.status(200).json({ message: 'Authentication successful' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

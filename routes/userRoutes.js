@@ -3,7 +3,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const eventBus = require('../config/eventBus');
 
 const router = express.Router();
 
@@ -23,10 +22,6 @@ router.post('/register', async (req, res) => {
 
     // Criação do usuário no banco de dados
     const newUser = await User.create({ name, lastName, spotifyProfile, email, password: hashedPassword });
-
-    // Publica um evento de usuário registrado no barramento
-    const eventData = JSON.stringify({ userId: newUser.id, name: newUser.name, lastName: newUser.lastName, email: newUser.email });
-    await eventBus.publishEvent('user-exchange', 'user.registered', eventData);
 
     res.status(201).json({ user: newUser });
   } catch (error) {
