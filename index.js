@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const sequelize = require('./config/database');
 const User = require('./models/User');
+const Post = require('./models/Post'); // Importação do modelo Post
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
@@ -13,7 +14,7 @@ dotenv.config();
 const secretKey = process.env.SECRET_KEY;
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 
 app.use(express.json());
 
@@ -35,10 +36,11 @@ sequelize
   .then(() => {
     console.log('Connected to the database');
 
-    return User.sync({ force: false });
+    // Sincroniza os modelos com o banco de dados
+    return sequelize.sync({ force: false });
   })
   .then(() => {
-    console.log('User model synchronized with the database');
+    console.log('Models synchronized with the database');
 
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
