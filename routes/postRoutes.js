@@ -1,7 +1,9 @@
 const express = require('express');
 const Post = require('../models/Post');
+const { EventEmitter } = require('events');
 
 const router = express.Router();
+const postEventEmitter = new EventEmitter();
 
 // Middleware de autenticação
 const authenticateUser = (req, res, next) => {
@@ -25,6 +27,9 @@ router.post('/create', authenticateUser, async (req, res) => {
     // Criação do post no banco de dados
     const newPost = await Post.create({ title, description, albumPhoto, userId });
 
+    // Emitir evento de novo post criado
+    postEventEmitter.emit('postCreated', newPost);
+
     res.status(201).json({ post: newPost });
   } catch (error) {
     console.error(error);
@@ -38,6 +43,58 @@ router.get('/list', async (req, res) => {
     const posts = await Post.findAll();
 
     res.status(200).json({ posts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para excluir um post
+router.delete('/delete/:id', authenticateUser, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId; // Obtém o ID do usuário da requisição
+
+    // Verifica se o post pertence ao usuário autenticado antes de excluí-lo
+    const post = await Post.findOne({ where: { id: postId, userId: userId } });
+    if (!post) {
+      return res.status(404).json({ error: 'Post não encontrado' });
+    }
+
+    // Exclui o post do banco de dados
+    await post.destroy();
+
+    // Emitir evento de post excluído
+    postEventEmitter.emit('postDeleted', postId);
+
+    res.status(200).json({ message: 'Post excluído com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para atualizar um post
+router.put('/update/:id', authenticateUser, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId; // Obtém o ID do usuário da requisição
+
+    const { title, description, albumPhoto } = req.body;
+
+    // Verifica se o post pertence ao usuário autenticado antes de atualizá-lo
+    const post = await Post.findOne({ where: { id: postId, userId: userId } });
+    if (!post) {
+      return res.status(404).json({ error: 'Post não encontrado' });
+    }
+
+    // Atualiza os campos do post no banco de dados
+    post.title = title;
+    post.description = description;
+    post.albumPhoto = albumPhoto;
+    await post.save();
+
+    res.status(200).json({ message: 'Post atualizado com sucesso', post });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro interno do servidor' });
