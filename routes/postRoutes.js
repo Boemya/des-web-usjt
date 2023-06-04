@@ -101,4 +101,61 @@ router.put('/update/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// Rota para adicionar um like a um post
+router.post('/like/:id', authenticateUser, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId; // Obtém o ID do usuário da requisição
+
+    // Verifica se o post existe antes de adicionar o like
+    const post = await Post.findByPk(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post não encontrado' });
+    }
+
+    // Verifica se o usuário já deu like no post
+    if (post.likes.includes(userId)) {
+      return res.status(400).json({ error: 'Você já deu like neste post' });
+    }
+
+    // Adiciona o ID do usuário aos likes do post e incrementa o contador de likes
+    post.likes.push(userId);
+    post.likes += 1;
+
+    // Salva as alterações no banco de dados
+    await post.save();
+
+    res.status(200).json({ message: 'Like adicionado com sucesso', post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para adicionar um comentário a um post
+router.post('/comment/:id', authenticateUser, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId; // Obtém o ID do usuário da requisição
+    const comment = req.body.comment; // Obtém o comentário enviado na requisição
+
+    // Verifica se o post existe antes de adicionar o comentário
+    const post = await Post.findByPk(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post não encontrado' });
+    }
+
+    // Adiciona o comentário aos comentários do post
+    post.comments.push({ userId, comment });
+
+    // Salva as alterações no banco de dados
+    await post.save();
+
+    res.status(200).json({ message: 'Comentário adicionado com sucesso', post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 module.exports = router;

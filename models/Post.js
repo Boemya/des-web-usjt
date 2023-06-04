@@ -20,6 +20,14 @@ const Post = sequelize.define('Post', {
     type: DataTypes.STRING,
     allowNull: true
   },
+  likes: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  comments: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
+    defaultValue: []
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false
