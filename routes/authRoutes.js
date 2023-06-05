@@ -37,4 +37,15 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Usuário deslogado com sucesso' });
 });
 
+// Rota para verificar a autenticação do usuário
+router.get('/auth/verify', (req, res) => {
+  if (req.session.userId) {
+    // O usuário está autenticado, pois há um ID de usuário na sessão
+    res.status(200).json({ authenticated: true });
+  } else {
+    // O usuário não está autenticado, pois não há um ID de usuário na sessão
+    res.status(401).json({ authenticated: false });
+  }
+});
+
 module.exports = router;

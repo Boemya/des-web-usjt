@@ -2,12 +2,14 @@ body {
     background-image: url('img.jpg');
     background-size: cover;
     background-position: center;
-}
+    background-color: rgba(226, 216, 216, 0.5);
+  }
+  
 
 nav {
     background-color: #68067c;
     padding: 0px;
-    color: #fff;
+    color: #c71e1e;
     display: flex;
     align-items: center;
 }
@@ -19,18 +21,21 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-header img {
-    width: 100px;
-    height: 100px;
-    margin-right: 10px;
-}
-
-header h1 {
+    flex-direction: column;
+  }
+  
+  header h1 {
     font-size: 60px;
-}
-
+    margin-bottom: 0;
+    display: inline-block;
+  }
+  
+  
+  header h2 {
+    font-size: 20px;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
 
 nav {
     margin-top: 0px;

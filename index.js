@@ -35,12 +35,10 @@ app.use('/posts', postRoutes);
 // Subscrever eventos de novo post criado e post excluído
 postEventEmitter.on('postCreated', (post) => {
   console.log('Novo post criado:', post);
-  // Lógica adicional para lidar com o novo post criado
 });
 
 postEventEmitter.on('postDeleted', (postId) => {
   console.log('Post excluído:', postId);
-  // Lógica adicional para lidar com o post excluído
 });
 
 sequelize
