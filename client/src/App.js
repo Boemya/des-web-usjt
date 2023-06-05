@@ -16,7 +16,7 @@ const App = () => {
   const checkAuthentication = async () => {
     try {
       const response = await axios.get('http://localhost:3003/auth/verify', {
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       if (response && response.data && response.data.authenticated) {
@@ -33,7 +33,10 @@ const App = () => {
   const handleLogout = async () => {
     try {
       await axios.post('http://localhost:3003/auth/logout', null, {
-        withCredentials: true,
+        // withCredentials: true,
+        headers: {
+          'Acess-Control-Allow-Credentials': 'true'
+        },
       });
 
       setAuthenticated(false);
@@ -83,7 +86,7 @@ const App = () => {
             path="/login"
             element={<Login setAuthenticated={setAuthenticated} handleLogin={handleLogin} />}
           />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login/register" element={<Register />} />
         </Routes>
       </div>
     </Router>

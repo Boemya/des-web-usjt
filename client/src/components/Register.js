@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
+import { useNavigate, redirect } from 'react-router-dom';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -8,21 +9,41 @@ const Register = () => {
   const [spotifyProfile, setSpotifyProfile] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3003/users/register', {
-        name,
-        lastName,
-        spotifyProfile,
-        email,
-        password,
+      // const response = await axios.post('http://localhost:3003/users/register', {
+      //   name,
+      //   lastName,
+      //   spotifyProfile,
+      //   email,
+      //   password,
+      // },{headers:{
+      //   'Content-Type': 'application/json',
+      //   'Access-Control-Allow-Origin': "*"
+      // }
+      // }
+      // );
+      const response = await fetch('http://localhost:3003/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': "*"
+        },
+        body: JSON.stringify({
+          name,
+          lastName,
+          spotifyProfile,
+          email,
+          password,
+        }),
       });
-      console.log(response.data); 
+      navigate('/login')
     } catch (error) {
-      console.error(error.response.data); 
+      console.error(error); 
     }
   };
 

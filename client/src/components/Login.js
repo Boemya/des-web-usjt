@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
 
@@ -9,27 +8,33 @@ const Login = ({ setAuthenticated }) => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    console.log('teste')
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3003/auth/login', {
-        email,
-        password,
+      const response = await fetch('http://localhost:3003/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': "*"
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      if (response && response.data) {
-        console.log(response.data);
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
         setAuthenticated(true);
-        navigate('/'); // Redireciona o usuário para a página Home
+        navigate('/');
       } else {
         console.log('Resposta vazia');
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        console.error(error.response.data);
-      } else {
-        console.error('Resposta vazia');
-      }
+      console.error('Resposta vazia');
     }
   };
 

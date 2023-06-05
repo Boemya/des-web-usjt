@@ -8,6 +8,12 @@ const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const { EventEmitter } = require('events');
+const allowCrossDomain = (req, res, next) => {
+  res.header(`Access-Control-Allow-Origin`, `http://localhost:3000`);
+  res.header(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
+  res.header(`Access-Control-Allow-Headers`, `*`);
+  next();
+};
 
 dotenv.config();
 
@@ -28,6 +34,7 @@ app.use(
   })
 );
 
+app.use(allowCrossDomain)
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/posts', postRoutes);

@@ -38,7 +38,7 @@ router.post('/logout', (req, res) => {
 });
 
 // Rota para verificar a autenticação do usuário
-router.get('/auth/verify', (req, res) => {
+router.get('/verify', (req, res) => {
   if (req.session.userId) {
     // O usuário está autenticado, pois há um ID de usuário na sessão
     res.status(200).json({ authenticated: true });
