@@ -1,17 +1,22 @@
-// Navigation.js
 import React from 'react';
-import './navigation.css'; 
+import { Link } from 'react-router-dom';
+import './navigation.css';
 
-const Navigation = () => {
+const Navigation = ({ handleLogout }) => {
   return (
-    <header className="header"> 
+    <header className="header">
       <div className="logo-container">
-       
+        {/* Coloque aqui o código ou componente do logo */}
       </div>
       <nav>
-        <div className="login-container">
-    
-      </div>
+        <ul className="nav-links">
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <button onClick={handleLogout}>Logout</button>
+          </li>
+        </ul>
       </nav>
     </header>
   );
@@ -19,10 +24,6 @@ const Navigation = () => {
 
 export default Navigation;
 
-  
-  
-  
-  
   
   
   

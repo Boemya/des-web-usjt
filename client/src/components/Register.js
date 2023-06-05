@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Register.css';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -19,19 +20,14 @@ const Register = () => {
         email,
         password,
       });
-      console.log(response.data); // Exemplo de tratamento de resposta
-      // Lógica adicional após o cadastro bem-sucedido
-
-      // Redirecionar para a página de login, por exemplo
-      // window.location.href = '/login';
+      console.log(response.data); 
     } catch (error) {
-      console.error(error.response.data); // Exemplo de tratamento de erro
-      // Lógica adicional para tratamento de erro
+      console.error(error.response.data); 
     }
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Register</h1>
       <form onSubmit={handleRegister}>
         <input

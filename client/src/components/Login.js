@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
 
 const Login = ({ setAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,21 +16,19 @@ const Login = ({ setAuthenticated }) => {
         email,
         password,
       });
+
       if (response && response.data) {
-        console.log(response.data); // Exemplo de tratamento de resposta
-        setAuthenticated(true); // Autenticação bem-sucedida, define o estado de autenticação como true
-        // Lógica adicional após o login bem-sucedido
+        console.log(response.data);
+        setAuthenticated(true);
+        navigate('/'); // Redireciona o usuário para a página Home
       } else {
-        console.log('Resposta vazia'); // Exemplo de tratamento de erro
-        // Lógica adicional para tratamento de erro
+        console.log('Resposta vazia');
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        console.error(error.response.data); // Exemplo de tratamento de erro
-        // Lógica adicional para tratamento de erro
+        console.error(error.response.data);
       } else {
-        console.error('Resposta vazia'); // Exemplo de tratamento de erro
-        // Lógica adicional para tratamento de erro
+        console.error('Resposta vazia');
       }
     }
   };
@@ -60,7 +60,7 @@ const Login = ({ setAuthenticated }) => {
         </div>
         <button type="submit">Login</button>
         <p>
-          Não é cadastrado? <a href="/register">Cadastre-se</a>
+          Não é cadastrado? <Link to="./Register">Cadastre-se</Link>
         </p>
       </form>
     </div>

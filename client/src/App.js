@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/home';
 import Login from './components/Login';
 import Navigation from './components/navigation';
 import axios from 'axios';
+import Register from './components/Register';
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -41,6 +42,29 @@ const App = () => {
     }
   };
 
+  const handleLogin = async (email, password) => {
+    try {
+      console.log('Email:', email);
+      console.log('Password:', password);
+
+      const response = await axios.post('http://localhost:3003/auth/login', {
+        email,
+        password,
+      });
+
+      console.log('Response:', response);
+
+      if (response && response.data) {
+        console.log('Login successful');
+        setAuthenticated(true);
+      } else {
+        console.log('Empty response');
+      }
+    } catch (error) {
+      console.error('Error:', error.response ? error.response.data : error.message);
+    }
+  };
+
   return (
     <Router>
       <div>
@@ -57,8 +81,9 @@ const App = () => {
           />
           <Route
             path="/login"
-            element={<Login setAuthenticated={setAuthenticated} />}
+            element={<Login setAuthenticated={setAuthenticated} handleLogin={handleLogin} />}
           />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>
