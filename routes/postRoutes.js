@@ -118,8 +118,7 @@ router.post('/like/:id', authenticateUser, async (req, res) => {
       return res.status(400).json({ error: 'Você já deu like neste post' });
     }
 
-    // Adiciona o ID do usuário aos likes do post e incrementa o contador de likes
-    post.likes.push(userId);
+    // Incrementa o contador de likes
     post.likes += 1;
 
     // Salva as alterações no banco de dados
