@@ -1,10 +1,16 @@
+header h1 {
+    font-size: 60px;
+    margin-bottom: 0;
+    display: inline-block;
+    color:#fff;
+  }
 .register-container {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #b61313;
+    background-color: #68067c;
   }
   
   .register-container h1 {
